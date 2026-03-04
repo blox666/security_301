@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Vault</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #0f172a;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        .card {
+            background-color: #1e293b;
+            padding: 40px;
+            border-radius: 15px;
+            width: 350px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: none;
+            background-color: #334155;
+            color: white;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #2563eb;
+        }
+
+        #output {
+            margin-top: 15px;
+            word-wrap: break-word;
+            font-size: 14px;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>🔐 Secure Vault</h2>
+
+    <input type="password" id="passwordInput" placeholder="Enter password">
+
+    <textarea id="dataInput" placeholder="Enter secret text"></textarea>
+
+    <button onclick="saveData()">Save Encrypted</button>
+    <button onclick="checkPassword()">Unlock</button>
+
+    <p id="output"></p>
+</div>
+
+<script>
+    const correctPassword = "1234";
+
+    function encrypt(text, password) {
+        return btoa(text + password);
+    }
+
+    function decrypt(text, password) {
+        let decoded = atob(text);
+        return decoded.replace(password, "");
+    }
+
+    function saveData() {
+        let password = document.getElementById("passwordInput").value;
+        let text = document.getElementById("dataInput").value;
+
+        let encrypted = encrypt(text, password);
+        localStorage.setItem("secureData", encrypted);
+
+        alert("Data Encrypted and Saved!");
+    }
+
+    function checkPassword() {
+        let password = document.getElementById("passwordInput").value;
+
+        if(password === correctPassword){
+            let encrypted = localStorage.getItem("secureData");
+            let decrypted = decrypt(encrypted, password);
+            document.getElementById("output").innerText = decrypted;
+        } else {
+            alert("Wrong Password!");
+        }
+    }
+</script>
+
+</body>
+</html>
