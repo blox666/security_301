@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Vault</title>
+</head>
+<body style="text-align:center; font-family:Arial; margin-top:50px;">
+
+<h2>Enter Password</h2>
+
+<input type="password" id="passwordInput" placeholder="Enter password">
+<br><br>
+
+<textarea id="dataInput" placeholder="Enter secret text"></textarea>
+<br><br>
+
+<button onclick="saveData()">Save Encrypted</button>
+<button onclick="checkPassword()">Unlock</button>
+
+<p id="output"></p>
+
+<script>
+    const correctPassword = "1234";  // change this
+
+    function encrypt(text, password) {
+        return btoa(text + password);  // simple encryption
+    }
+
+    function decrypt(text, password) {
+        let decoded = atob(text);
+        return decoded.replace(password, "");
+    }
+
+    function saveData() {
+        let password = document.getElementById("passwordInput").value;
+        let text = document.getElementById("dataInput").value;
+
+        let encrypted = encrypt(text, password);
+        localStorage.setItem("secureData", encrypted);
+
+        alert("Data Encrypted and Saved!");
+    }
+
+    function checkPassword() {
+        let password = document.getElementById("passwordInput").value;
+
+        if(password === correctPassword){
+            let encrypted = localStorage.getItem("secureData");
+            let decrypted = decrypt(encrypted, password);
+            document.getElementById("output").innerText = decrypted;
+        } else {
+            alert("Wrong Password!");
+        }
+    }
+</script>
+
+</body>
+</html>
